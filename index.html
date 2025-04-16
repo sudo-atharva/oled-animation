@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OLED Animation Tool</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Welcome to the OLED Animation Tool</h1>
+    
+    <!-- Add Canvas UI and Controls -->
+    <div id="ui-container">
+      <label for="resolution">OLED Resolution:</label>
+      <select id="resolution">
+        <option value="128x64">128x64</option>
+        <option value="128x32">128x32</option>
+      </select>
+
+      <button id="upload-image">Upload Image</button>
+      <input type="file" id="image-input" accept=".png, .bmp" style="display: none;">
+
+      <canvas id="drawing-canvas" width="128" height="64" style="border:1px solid #000;"></canvas>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
