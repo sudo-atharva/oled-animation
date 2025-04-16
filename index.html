@@ -10,8 +10,9 @@
     <h1>Welcome to the OLED Animation Tool</h1>
     
     <!-- Add Canvas UI and Controls -->
-    <div id="ui-container">
-      <label for="resolution">OLED Resolution:</label>
+    <div id="ui-container" style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+      <h1>OLED Animation Tool</h1>
+      <label for="resolution">Select OLED Resolution:</label>
       <select id="resolution">
         <option value="128x64">128x64</option>
         <option value="128x32">128x32</option>
@@ -20,7 +21,16 @@
       <button id="upload-image">Upload Image</button>
       <input type="file" id="image-input" accept=".png, .bmp" style="display: none;">
 
-      <canvas id="drawing-canvas" width="128" height="64" style="border:1px solid #000;"></canvas>
+      <canvas id="drawing-canvas" width="128" height="64" style="border:1px solid #000; margin-top: 10px;"></canvas>
+
+      <button id="export-code">Export Code</button>
+      <button id="add-frame">Add Frame</button>
+      <button id="play-pause">Play/Pause Animation</button>
+
+      <label for="frame-delay">Frame Delay (ms):</label>
+      <input type="number" id="frame-delay" value="100" style="width: 80px;">
+
+      <textarea id="output-code" readonly style="width: 90%; height: 150px; margin-top: 10px;"></textarea>
     </div>
 
     <script src="script.js"></script>

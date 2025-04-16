@@ -79,20 +79,31 @@ function convertToMonochrome() {
   return { monochromeData, width, height };
 }
 
-function exportU8g2Code() {
-  const { monochromeData, width, height } = convertToMonochrome();
-  let code = `static const unsigned char bitmap[] PROGMEM = {\n`;
+// Debugging and ensuring code generation works properly
+function debugExportU8g2Code() {
+  try {
+    const { monochromeData, width, height } = convertToMonochrome();
+    if (!monochromeData || monochromeData.length === 0) {
+      throw new Error('Monochrome data is empty. Ensure the canvas has valid image data.');
+    }
 
-  for (let i = 0; i < monochromeData.length; i++) {
-    code += `0x${monochromeData[i].toString(16).padStart(2, '0')}, `;
-    if ((i + 1) % 12 === 0) code += '\n';
+    let code = `static const unsigned char bitmap[] PROGMEM = {\n`;
+
+    for (let i = 0; i < monochromeData.length; i++) {
+      code += `0x${monochromeData[i].toString(16).padStart(2, '0')}, `;
+      if ((i + 1) % 12 === 0) code += '\n';
+    }
+
+    code += `};\n\n`;
+    code += `// Example usage:\n`;
+    code += `u8g2.drawXBM(0, 0, ${width}, ${height}, bitmap);\n`;
+
+    output.textContent = code;
+    console.log('Code generated successfully:', code);
+  } catch (error) {
+    console.error('Error generating code:', error.message);
+    alert('Failed to generate code. Check the console for details.');
   }
-
-  code += `};\n\n`;
-  code += `// Example usage:\n`;
-  code += `u8g2.drawXBM(0, 0, ${width}, ${height}, bitmap);\n`;
-
-  output.textContent = code;
 }
 
 // Add support for multiple frames and export as a sequence
@@ -179,7 +190,7 @@ delayInput.addEventListener('change', (event) => {
 document.body.appendChild(delayInput);
 
 // Add buttons for exporting and adding frames
-exportButton.addEventListener('click', exportU8g2Code);
+exportButton.addEventListener('click', debugExportU8g2Code);
 addFrameButton.addEventListener('click', addFrame);
 
 // Add dark mode toggle functionality
@@ -260,6 +271,24 @@ resolutionSelect.addEventListener('change', () => {
   canvas.height = height;
   drawPixelGrid();
 });
+
+// Fix download functionality for generated code
+function downloadCode() {
+  const outputCode = document.getElementById('output-code').value;
+  if (!outputCode) {
+    alert('No code to download. Please generate the code first.');
+    return;
+  }
+
+  const blob = new Blob([outputCode], { type: 'text/plain' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'generated_code.h';
+  link.click();
+}
+
+const exportButton = document.getElementById('export-code');
+exportButton.addEventListener('click', downloadCode);
 
 // Initialize canvas with default resolution
 drawPixelGrid();
